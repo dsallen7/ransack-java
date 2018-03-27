@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<data id="startGameModal">
+    <visibility>VISIBLE</visibility>
+    <verticalAlignment>BOTTOM</verticalAlignment>
+    <horizontalAlignment>CENTER</horizontalAlignment>
+    <children length="2">
+    	<value class="org.mini2Dx.ui.element.Row" id="newGameRow">
+            <visibility>VISIBLE</visibility>
+            <children length="1">
+                <value class="org.mini2Dx.ui.element.TextButton" id="newGameButton">
+            	    <visibility>VISIBLE</visibility>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>New Game</text>
+                            <horizontalAlignment>CENTER</horizontalAlignment>
+                        </value>
+                    </children>
+            	</value>
+            </children>
+        </value>
+    	<value class="org.mini2Dx.ui.element.Row" id="quitGameRow">
+            <visibility>VISIBLE</visibility>
+            <children length="1">
+                <value class="org.mini2Dx.ui.element.TextButton" id="quitGameButton">
+            	    <visibility>VISIBLE</visibility>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>Quit Game</text>
+                            <horizontalAlignment>CENTER</horizontalAlignment>
+                        </value>
+                    </children>
+            	</value>
+            </children>
+        </value>
+    </children>
+</data>
