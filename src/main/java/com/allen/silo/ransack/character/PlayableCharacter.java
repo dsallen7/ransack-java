@@ -16,13 +16,15 @@ import com.allen.silo.ransack.utils.RandomUtility;
 public abstract class PlayableCharacter extends BaseCharacter {
 	public static Logger logger = Logger.getLogger(PlayableCharacter.class.getName());
 	
-	private final boolean isNPC;
-	
+	private final boolean isNPC;	
 	protected Queue<Location> moveQueue;
+	protected int stepIndex;
+	
 		
-	public PlayableCharacter(Location l, String imageFileName, boolean isNPC, BasicMap m, String name){
-		super(l, imageFileName, m, name);
+	public PlayableCharacter(Location l, String name, boolean isNPC, BasicMap m){
+		super(l, name, m);
 		this.isNPC = isNPC;
+		this.stepIndex = 0;
 		moveQueue = new LinkedList<Location>();
 	}
 	
@@ -54,6 +56,20 @@ public abstract class PlayableCharacter extends BaseCharacter {
 		return isNPC;
 	}
 	
+	public void takeStep(){
+		this.stepIndex = this.stepIndex + Constants.WALKING_LIST.get(this.stepIndex);
+		this.stepIndex = (this.stepIndex + 1)%4;
+		this.currentSpriteImage = spriteImages.get(this.stepIndex);
+	}
+	
+	/*
+	 * 
+	 *def takeStep(self):
+        self.imgIdx = self.imgIdx + const.walkingList[self.stepIdx]
+        self.stepIdx = ( self.stepIdx + 1 ) % 4
+        self.image = self.images[self.imgIdx]
+	 */
+	
 	public void enqueueRandom(PlayableMap currentMap){
 		int moveOrNot = RandomUtility.randRange(0, 100);
 		if (moveOrNot == 5){
@@ -65,12 +81,12 @@ public abstract class PlayableCharacter extends BaseCharacter {
 	}
 	
 	public void enqueueMove(Location newL, PlayableMap currentMap){
-		String isTileOccupied = currentMap.isTileOccupied(newL);
-		if( isTileOccupied != null){
-			logger.log(Level.INFO, "Tile occupied by: " + isTileOccupied);
-			return;
-		}
 		if (currentMap.isMovable(newL)){
+			String isCellOccupied = currentMap.isTileOccupied(newL);
+			if( isCellOccupied != null){
+				logger.log(Level.INFO, "Tile occupied by: " + isCellOccupied);
+				return;
+			}
 			currentMap.setGameTileOccupied(newL, this.name);
 			currentMap.clearTileProperty(this.getLocation());
 			moveQueue.add(newL);			

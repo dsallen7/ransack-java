@@ -25,46 +25,13 @@ public class BasicMap extends TiledMap implements Serializable {
 	public static Logger logger = Logger.getLogger(BasicMap.class.getName());
 	
 	protected Grid grid;
-	
 	protected TiledMap tiledMap;
+	protected int offsetX;
+	protected int offsetY;
 		
 	public BasicMap(FileHandle fileHandle) throws IOException, TiledException{
 		super(fileHandle);
 		grid = new Grid(this.getWidth(), this.getHeight());
-		/*
-		try{
-			File f = new File(mapName);
-			List<String> mapLines = readLines(f);
-			initGrid(mapLines.size(), mapLines.get(0).length());
-			for (int i = 0; i < mapLines.size(); i++){
-				for (int j = 0; j < mapLines.get(i).length(); j++){
-					setTileBase(j, i, mapLines.get(i).charAt(j));
-				}
-			}
-		}catch (Exception e){
-			logger.log(Level.SEVERE, "Exception in BasicMap: ", e);
-		}*/
-	}
-
-	public static List<String> readLines(File file){
-		BufferedReader reader;
-		List<String> results = new ArrayList<String>();
-		try {
-			if (!file.exists()) {
-				throw new FileNotFoundException();
-			}
-			reader = new BufferedReader(new FileReader(file));
-			String line = reader.readLine();
-			while (line != null) {
-				results.add(line);
-				line = reader.readLine();
-			}
-		} catch (FileNotFoundException e) {
-			logger.log(Level.SEVERE, "FileNotFoundException in BasicMap: ", e);
-		} catch (IOException e) {
-			logger.log(Level.SEVERE, "IOException in BasicMap: ", e);
-		}
-		return results;
 	}
 	
 	public int dimensionX(){
@@ -116,6 +83,22 @@ public class BasicMap extends TiledMap implements Serializable {
 	public boolean isMovable(Location l){
 		boolean isEdge = !(l.getLocX() < 0 || l.getLocY() < 0 || l.getLocX() > this.getWidth()-1 || l.getLocY() > this.getHeight()-1 );
 		return isEdge;
+	}
+
+	public int getOffsetX() {
+		return offsetX;
+	}
+
+	public void setOffsetX(int offsetX) {
+		this.offsetX = offsetX;
+	}
+
+	public int getOffsetY() {
+		return offsetY;
+	}
+
+	public void setOffsetY(int offsetY) {
+		this.offsetY = offsetY;
 	}
 	
 }

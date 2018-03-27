@@ -7,7 +7,7 @@ import com.allen.silo.ransack.maps.EditorMap;
 public class Cursor extends BaseCharacter {
 	
 	public Cursor(Location l, String fileName, BasicMap m){
-		super(l, fileName, m, "cursor");
+		super(l, "cursor", m);
 	}
 	
 	public void move(int key, EditorMap currentMap){

@@ -7,6 +7,7 @@ import org.mini2Dx.core.geom.Line;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.ui.element.Image;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -16,7 +17,7 @@ import com.allen.silo.ransack.character.Player;
 import com.allen.silo.ransack.maps.BasicMap;
 import com.allen.silo.ransack.utils.Constants;
 
-public class Display {
+public class Display implements Screen{
 	public static Logger logger = Logger.getLogger(Display.class.getName());
 	private Spritesheet spritesheet;
 	
@@ -53,12 +54,36 @@ public class Display {
 	 */
 	
 
-	public void drawImageMap(Graphics g, BasicMap m){
-		m.draw(g, 0, 0);
+	public void drawImageMap(Graphics g, int x, int y, BasicMap m){
+		m.draw(g, x, y);
+	}
+	
+	public void redrawMapWindow(BasicMap m){
+		
 	}
 	
 	public void drawPlayableCharacter(Graphics g, BasicMap m, PlayableCharacter p){
-		g.drawSprite(p.getSprite(), p.getPoint().getRenderX(), p.getPoint().getRenderY());
+		if (p.getName().equalsIgnoreCase("player")){
+			int playerRenderX = p.getPoint().getRenderX();
+			int playerRenderY = p.getPoint().getRenderY();
+			
+			if ( !((Player)p).isOutsideTopOrBottomMargins(m) ){
+				playerRenderY = 5*Constants.BLOCKSIZE;
+			}
+			if( !((Player)p).isOutsideLeftOrRightMargins(m) ) {
+				playerRenderX = 5*Constants.BLOCKSIZE;
+			}
+			if ( ((Player)p).isOutsideBottomMargin(m) ){
+				playerRenderY = playerRenderY + m.getOffsetY();
+			}
+			if( ((Player)p).isOutsideRightMargin(m)){
+				playerRenderX = playerRenderX + m.getOffsetX();
+			}
+			this.showActualPlayerRenderCoords(g, playerRenderX, playerRenderY);
+			g.drawSprite(p.getSprite(), playerRenderX, playerRenderY);
+		}else{
+			g.drawSprite(p.getSprite(), p.getPoint().getRenderX()+m.getOffsetX(), p.getPoint().getRenderY()+m.getOffsetY());
+		}
 	}
 	
 	public void drawPlayer(Graphics g, BasicMap m, Player p){
@@ -66,8 +91,20 @@ public class Display {
 	}
 	
 	public void showPlayerLocation(Graphics g, Player p){
-		g.drawString("Player X: " + p.getX(), 400, 400);
-		g.drawString("Player Y: " + p.getY(), 400, 410);
+		g.drawString("Player X: " + p.getX() + "rX: " + p.getPoint().getRenderX(), 400, 400);
+		g.drawString("Player Y: " + p.getY() + "rY: " + p.getPoint().getRenderY(), 400, 410);
+		g.drawString("Player stepIndex: " + p.getStepIndex(), 400, 420);
+	}
+	
+
+	public void showWindowOffsets(Graphics g, BasicMap m){
+		g.drawString("Offset X: " + m.getOffsetX(), 400, 430);
+		g.drawString("Offset Y: " + m.getOffsetY(), 400, 440);
+	}
+	
+	public void showActualPlayerRenderCoords(Graphics g, int x, int y){
+		g.drawString("Actual X: " + x, 400, 450);
+		g.drawString("Actual Y: " + y, 400, 460);
 	}
 	
 	public void showCursorLocation(Cursor c){
@@ -95,5 +132,47 @@ public class Display {
 		
 	public Image getWindowPane(){
 		return windowPane;
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(float arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resize(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+		
 	}
 }

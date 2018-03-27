@@ -2,16 +2,40 @@ package com.allen.silo.ransack.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.mini2Dx.ui.element.Image;
 
+import com.allen.silo.ransack.character.PlayableCharacter;
+import com.allen.silo.ransack.character.attributes.Script;
 import com.badlogic.gdx.files.FileHandle;
 
 public class FileUtility {
+	public static Logger logger = Logger.getLogger(FileUtility.class.getName());
 	
-	public static List<Image> loadCharacterSheer(String filename){
+	public static Script loadCharacterScript(String fileName){
+		FileHandle file = getAsset(Constants.LOCAL_SCRIPTS_PATH+fileName);
+		JAXBContext jaxbContext;
+		Script script = null;
+		try {
+			jaxbContext = JAXBContext.newInstance(Script.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			script = (Script) jaxbUnmarshaller.unmarshal(file.file());
+		} catch (JAXBException e) {
+			logger.log(Level.SEVERE, null, e);
+		}
+		return script;
+	}
+	
+	public static List<Image> loadCharacterSheet(String filename){
 		return new ArrayList<Image>();
 	}
+	
 	
 	public static FileHandle loadMap(String fileName){
 		return getAsset(Constants.LOCAL_MAPS_PATH+fileName);
@@ -19,6 +43,10 @@ public class FileUtility {
 	
 	public static FileHandle getCharSheet(String fileName){
 		return getAsset(Constants.LOCAL_CHARSHEET_PATH+fileName);
+	}
+	
+	public static FileHandle getUIAsset(String fileName){
+		return getAsset(Constants.LOCAL_UI_PATH+fileName);
 	}
 	
 	public static FileHandle getAsset(String fileName){

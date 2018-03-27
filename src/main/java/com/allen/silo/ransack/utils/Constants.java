@@ -8,9 +8,11 @@ import com.badlogic.gdx.Input;
 
 public interface Constants {
 	
-	public static final String LOCAL_ASSETS_PATH = "C:/Users/Dan/workspace/RansackMini2Dx/assets/";
+	public static final String LOCAL_ASSETS_PATH = "C:/Users/Dan/workspace/RansackMini2Dx/core/assets/";
 	public static final String LOCAL_CHARSHEET_PATH = "IMG/CHAR/";
 	public static final String LOCAL_MAPS_PATH = "MAPS/";
+	public static final String LOCAL_SCRIPTS_PATH = "SCRIPTS/";
+	public static final String LOCAL_UI_PATH = "UI/";
 
 	public static final int windowX = 640;
 	public static final int windowY = 480;
@@ -19,6 +21,10 @@ public interface Constants {
 	public static final int editorWindowY = 480;
 	
 	public static final int BLOCKSIZE = 30;
+	/*
+	 * Size of window in tiles
+	 */
+	public static final int WINDOWSIZE = 10;
 	
 	/*
 	 * Non-blocking tiles
@@ -57,5 +63,5 @@ public interface Constants {
 	
 	
 	public static final List<Integer> MOVE_KEYS = new ArrayList<Integer>(Arrays.asList(Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.DOWN));
-
+	public static final List<Integer> WALKING_LIST = new ArrayList<Integer>(Arrays.asList(1, 9, -1, -9));
 }

@@ -17,7 +17,7 @@ public class Main {
 		cfg.width = 640;
 		cfg.height = 480;
 		cfg.vSyncEnabled = true;
+		logger.log(Level.INFO, "Kicking off game...");
 		new DesktopMini2DxGame(new Ransack(), cfg);
 	}
-
 }

@@ -1,42 +1,54 @@
 package com.allen.silo.ransack.character;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.mini2Dx.core.engine.geom.CollisionPoint;
 import org.mini2Dx.core.graphics.Sprite;
-import org.mini2Dx.ui.element.Image;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.allen.silo.ransack.character.attributes.Direction;
 import com.allen.silo.ransack.character.attributes.Location;
+import com.allen.silo.ransack.character.attributes.Script;
 import com.allen.silo.ransack.maps.BasicMap;
 import com.allen.silo.ransack.utils.Constants;
 import com.allen.silo.ransack.utils.FileUtility;
 import com.allen.silo.ransack.utils.ImageUtility;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 
 public abstract class BaseCharacter {
+	public static Logger logger = Logger.getLogger(BaseCharacter.class.getName());
 		
 	protected Location loc;
 	protected Sprite sprite;
 	protected CollisionPoint point;
 	protected String name;
 	protected Direction direction;
+	protected static Queue<String> mailbox;
 	
 	List<Texture> spriteImages;
 	
 	Texture currentSpriteImage;
 	
+	static{
+		mailbox = new LinkedList<String>();
+	}
+	
 	BaseCharacter(){}
 	
-	BaseCharacter(Location l, String imageFileName, BasicMap m, String name){
-		this.name = name;
+	BaseCharacter(Location l, String name, BasicMap m){
+		
+		Script script = FileUtility.loadCharacterScript(name+".xml");
+		this.name = script.getCharacterName();
+		logger.log(Level.INFO, "Creating character named: " + this.name);
+		
 		point = new CollisionPoint(l.getLocX()*Constants.BLOCKSIZE, l.getLocY()*Constants.BLOCKSIZE);
-		//Texture spriteSheet = new Texture(FileUtility.getCharSheet(imageFileName));
-		Pixmap spriteSheet = new Pixmap(FileUtility.getCharSheet(imageFileName));
+		Pixmap spriteSheet = new Pixmap(FileUtility.getCharSheet(script.getFileName()));
 		spriteImages = ImageUtility.loadSpriteImages(spriteSheet);
 		currentSpriteImage = spriteImages.get(2);
 		
@@ -68,6 +80,10 @@ public abstract class BaseCharacter {
 			break;
 		}
 		return new Location(newX, newY);
+	}
+	
+	public String getName(){
+		return this.name;
 	}
 	
 	public Location getLocation(){
