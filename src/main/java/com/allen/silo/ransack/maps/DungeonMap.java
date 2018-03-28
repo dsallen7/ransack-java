@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.mini2Dx.tiled.exception.TiledException;
 
-import com.badlogic.gdx.files.FileHandle;
-
 public class DungeonMap extends BasicMap {
 		
-	public DungeonMap(FileHandle fileHandle) throws IOException, TiledException{
-		super(fileHandle);
+	private static final long serialVersionUID = -1262973437551143498L;
+
+	public DungeonMap(String fileName) throws IOException, TiledException{
+		super(fileName);
 	}
 	
 }

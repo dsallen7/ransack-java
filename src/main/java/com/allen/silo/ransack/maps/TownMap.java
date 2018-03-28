@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.mini2Dx.tiled.exception.TiledException;
 
-import com.badlogic.gdx.files.FileHandle;
-
 public class TownMap extends BasicMap {
 
-	public TownMap(FileHandle fileHandle) throws IOException, TiledException {
-		super(fileHandle);
+	private static final long serialVersionUID = -4059466369440648553L;
+
+	public TownMap(String fileName) throws IOException, TiledException {
+		super(fileName);
 		// TODO Auto-generated constructor stub
 	}
 

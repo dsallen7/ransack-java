@@ -7,16 +7,12 @@ import java.util.logging.Logger;
 
 import org.mini2Dx.ui.element.Image;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-
 import com.allen.silo.ransack.utils.Constants;
+import com.badlogic.gdx.assets.AssetManager;
 
 public class Spritesheet {
 	
 	private Image sheet;
-	private Texture sheetT;
 	private List<Image> mapTiles;
 	
 	public static Logger logger = Logger.getLogger(Spritesheet.class.getName());

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="30" tileheight="30" infinite="0" nextobjectid="8">
- <tileset firstgid="1" source="mastersheet.tsx"/>
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="30" tileheight="30" infinite="0" nextobjectid="9">
+ <properties>
+  <property name="up" value="village1"/>
+ </properties>
+ <tileset firstgid="1" source="../../../assets/MAPS/mastersheet.tsx"/>
  <layer name="Tile Layer 1" width="10" height="10">
   <data encoding="csv">
 66,66,66,66,66,66,66,66,66,66,
@@ -9,21 +12,22 @@
 66,66,66,1,1,1,1,1,1,66,
 66,1,1,1,1,1,1,1,1,66,
 66,1,1,1,1,1,1,1,1,66,
-66,66,66,1,66,1,1,1,1,66,
+66,66,66,1,66,1,1,1,249,66,
 66,66,1,1,66,1,1,1,1,66,
 66,1,1,66,66,1,1,1,1,66,
 66,66,66,66,66,66,66,66,66,66
 </data>
  </layer>
- <objectgroup name="NPCs">
+ <objectgroup name="NPCs" offsetx="2.5" offsety="4">
   <object id="4" name="girl" type="NPC" x="253" y="75">
    <point/>
   </object>
   <object id="6" name="guard1" type="NPC" x="43" y="43.5">
    <point/>
   </object>
-  <object id="7" name="player" type="Player" x="137" y="138.5">
+  <object id="7" name="player" type="Player" x="254" y="196">
    <point/>
   </object>
  </objectgroup>
+ <objectgroup name="Portals"/>
 </map>

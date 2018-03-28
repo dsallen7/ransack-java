@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="mastersheet" tilewidth="30" tileheight="30" tilecount="256" columns="16">
- <image source="../IMG/mastersheet.bmp" width="480" height="480"/>
+ <image source="../../../assets/IMG/mastersheet.bmp" width="480" height="480"/>
  <tile id="0">
   <properties>
    <property name="isFloor" type="bool" value="true"/>
@@ -491,42 +491,49 @@
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="82">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="83">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="84">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="85">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="86">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="87">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="isPortal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="88">
@@ -1493,12 +1500,14 @@
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="stairsUp" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="249">
   <properties>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
+   <property name="stairsDown" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="250">

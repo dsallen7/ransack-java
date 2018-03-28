@@ -27,6 +27,17 @@ public interface Constants {
 	public static final int WINDOWSIZE = 10;
 	
 	/*
+	 * Event types
+	 */
+	public static final String DIALOG = "DIALOG";
+	public static final String BATTLE = "BATTLE";
+	public static final String SHOPPING = "SHOPPING";
+	public static final String MINIGAME = "MINIGAME";
+	public static final String PORTAL = "PORTAL";
+	public static final String STAIRSUP = "STAIRSUP";
+	public static final String STAIRSDOWN = "STAIRSDOWN";
+	
+	/*
 	 * Non-blocking tiles
 	 */
 	public static final int DUNGEON_FLOOR1 = 0;

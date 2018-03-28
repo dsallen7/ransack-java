@@ -1,25 +1,20 @@
 package com.allen.silo.ransack.character;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.allen.silo.ransack.character.attributes.Direction;
 import com.allen.silo.ransack.character.attributes.Location;
 import com.allen.silo.ransack.maps.BasicMap;
-import com.allen.silo.ransack.maps.PlayableMap;
 import com.allen.silo.ransack.utils.Constants;
 import com.allen.silo.ransack.utils.RandomUtility;
 
 public abstract class PlayableCharacter extends BaseCharacter {
 	public static Logger logger = Logger.getLogger(PlayableCharacter.class.getName());
 	
-	private final boolean isNPC;	
+	private final boolean isNPC;
 	protected Queue<Location> moveQueue;
 	protected int stepIndex;
-	
 		
 	public PlayableCharacter(Location l, String name, boolean isNPC, BasicMap m){
 		super(l, name, m);
@@ -28,7 +23,7 @@ public abstract class PlayableCharacter extends BaseCharacter {
 		moveQueue = new LinkedList<Location>();
 	}
 	
-	public void move(BasicMap m){
+	public void move(){
 		//logger.log(Level.INFO, "Queue size: " + moveQueue.size());
 		switch(direction){
 		case EAST:
@@ -45,8 +40,8 @@ public abstract class PlayableCharacter extends BaseCharacter {
 			break;
 		}
 		if(moveQueue.peek()!=null){
-			Location oldL = moveQueue.remove();
-			this.setLocation(oldL);
+			Location newL = moveQueue.remove();
+			this.setLocation(newL);
 			point.preUpdate();
 			point.set(this.getX()*Constants.BLOCKSIZE, this.getY()*Constants.BLOCKSIZE);
 		}
@@ -70,26 +65,17 @@ public abstract class PlayableCharacter extends BaseCharacter {
         self.image = self.images[self.imgIdx]
 	 */
 	
-	public void enqueueRandom(PlayableMap currentMap){
+	public Location getRandomLocation(){
+		Location newL = null;
 		int moveOrNot = RandomUtility.randRange(0, 100);
 		if (moveOrNot == 5){
-			List<Location> cardinals = getCardinals();
 			int moveDirection = Constants.MOVE_KEYS.get(RandomUtility.randRange(0, 4));
-			Location newL = getNewLocation(moveDirection, this.getLocation());
-			enqueueMove(newL, currentMap);
+			newL = getNewLocation(moveDirection, this.getLocation());
 		}
+		return newL;
 	}
 	
-	public void enqueueMove(Location newL, PlayableMap currentMap){
-		if (currentMap.isMovable(newL)){
-			String isCellOccupied = currentMap.isTileOccupied(newL);
-			if( isCellOccupied != null){
-				logger.log(Level.INFO, "Tile occupied by: " + isCellOccupied);
-				return;
-			}
-			currentMap.setGameTileOccupied(newL, this.name);
-			currentMap.clearTileProperty(this.getLocation());
-			moveQueue.add(newL);			
-		}
+	public void enqueueMove(Location newL){
+		moveQueue.add(newL);
 	}
 }

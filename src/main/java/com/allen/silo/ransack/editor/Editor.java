@@ -1,22 +1,18 @@
 package com.allen.silo.ransack.editor;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.mini2Dx.core.game.BasicGame;
-import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.tiled.exception.TiledException;
-
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 
 import com.allen.silo.ransack.character.Cursor;
 import com.allen.silo.ransack.character.attributes.Location;
 import com.allen.silo.ransack.display.Display;
 import com.allen.silo.ransack.maps.EditorMap;
 import com.allen.silo.ransack.utils.Constants;
+import com.badlogic.gdx.Input;
 
 public class Editor extends BasicGame { 
 	
@@ -37,7 +33,7 @@ public class Editor extends BasicGame {
 		//InputProvider provider = new InputProvider(container.getInput());
 		//provider.addListener(this);
 		try {
-			currentMap = new EditorMap(new FileHandle(""));
+			currentMap = new EditorMap("");
 			display = new Display();
 			cursor = new Cursor(new Location(0,0), "", currentMap);
 		} catch ( TiledException te){ 

@@ -12,6 +12,11 @@ public class Location {
 		this.setLocY(y);
 	}
 	
+	public Location(float x, float y){
+		this.setLocX((int)x);
+		this.setLocY((int)y);
+	}
+	
 	public int getLocX() {
 		return locX;
 	}

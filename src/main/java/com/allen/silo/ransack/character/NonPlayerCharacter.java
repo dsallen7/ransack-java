@@ -2,7 +2,6 @@ package com.allen.silo.ransack.character;
 
 import com.allen.silo.ransack.character.attributes.Location;
 import com.allen.silo.ransack.maps.BasicMap;
-import com.allen.silo.ransack.maps.PlayableMap;
 
 public class NonPlayerCharacter extends PlayableCharacter {
 		
@@ -10,7 +9,7 @@ public class NonPlayerCharacter extends PlayableCharacter {
 		super(l, name, true, m);
 	}
 	
-	public void move(PlayableMap currentMap){
-		super.move(currentMap);
+	public void move(){
+		super.move();
 	}
 }

@@ -1,10 +1,14 @@
 package com.allen.silo.ransack.maps;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.allen.silo.ransack.character.attributes.Location;
 
 public class Grid {
+	public static Logger logger = Logger.getLogger(Grid.class.getName());
 	
-	private GameTile[][] grid;
+	private Cell[][] grid;
 	
 	public Grid(){}
 	
@@ -13,20 +17,24 @@ public class Grid {
 
 		for (int i = 0;i<x;i++){
 			for (int j = 0;j<y;j++){
-				grid[i][j] = new GameTile();
+				grid[i][j] = new Cell();
 			}
 		}
 	}
 	
-	public void setGameTileOccupied(Location l, String occupier){
+	public Cell getCell(Location l){
+		return grid[l.getLocX()][l.getLocY()];
+	}
+	
+	public void setCellOccupied(Location l, String occupier){
 		grid[l.getLocX()][l.getLocY()].setOccupied(occupier);
 	}
 	
-	public String getGameTileOccupied(Location l){
+	public String getCellOccupied(Location l){
 		return grid[l.getLocX()][l.getLocY()].getOccupied();
 	}
 	
-	public void clearGameTileOccupied(Location l){
+	public void clearCellOccupied(Location l){
 		grid[l.getLocX()][l.getLocY()].setOccupied(null);
 	}
 
@@ -35,12 +43,12 @@ public class Grid {
 	}
 
 	public void initGridDimensions(int x, int y){
-		this.grid = new GameTile[x][y];
+		this.grid = new Cell[x][y];
 	}
 
 	public void setTileBase(int x, int y, char value){
 		if (grid[x][y] == null){
-			grid[x][y] = new GameTile(value);
+			grid[x][y] = new Cell(value);
 		}else{
 			grid[x][y].setBase(value);
 		}

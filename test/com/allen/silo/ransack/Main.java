@@ -11,7 +11,7 @@ import com.badlogic.gdx.backends.lwjgl.DesktopMini2DxGame;
 public class Main {
 	public static Logger logger = Logger.getLogger(Main.class.getName());
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		DesktopMini2DxConfig cfg = new DesktopMini2DxConfig(Ransack.GAME_IDENTIFIER);
 		cfg.title = "Ransack";
 		cfg.width = 640;

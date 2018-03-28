@@ -15,11 +15,11 @@ public class Player extends PlayableCharacter {
 	
 	public void enqueueMove(int key, PlayableMap currentMap){
 		Location newL = getNewLocation(key, this.getLocation());
-		super.enqueueMove(newL, currentMap);
+		super.enqueueMove(newL);
 	}
 	
-	public void move(PlayableMap currentMap){
-		super.move(currentMap);
+	public void move(){
+		super.move();
 	}
 	
 	public int getStepIndex(){

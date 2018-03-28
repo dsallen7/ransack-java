@@ -45,18 +45,16 @@ public abstract class BaseCharacter {
 		
 		Script script = FileUtility.loadCharacterScript(name+".xml");
 		this.name = script.getCharacterName();
-		logger.log(Level.INFO, "Creating character named: " + this.name);
 		
 		point = new CollisionPoint(l.getLocX()*Constants.BLOCKSIZE, l.getLocY()*Constants.BLOCKSIZE);
 		Pixmap spriteSheet = new Pixmap(FileUtility.getCharSheet(script.getFileName()));
 		spriteImages = ImageUtility.loadSpriteImages(spriteSheet);
 		currentSpriteImage = spriteImages.get(2);
 		
-		//currentSpriteImage.draw(spriteSheet, 0, 0);
 		direction = Direction.SOUTH;
 		setSprite(new Sprite(currentSpriteImage));
 		setLocation(l);
-		m.setGameTileOccupied(l, name);
+		m.setCellOccupied(l, name);
 	}
 	
 	public Location getNewLocation(int key, Location oldL){
