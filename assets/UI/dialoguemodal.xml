@@ -1,33 +1,21 @@
 <?xml version="1.0"?>
-<data id="startGameModal">
+<data id="dialogueModal">
     <visibility>VISIBLE</visibility>
-    <verticalAlignment>BOTTOM</verticalAlignment>
-    <horizontalAlignment>CENTER</horizontalAlignment>
+    <!--<verticalAlignment>TOP</verticalAlignment>
+    <horizontalAlignment>CENTER</horizontalAlignment>-->
     <children length="2">
-    	<value class="org.mini2Dx.ui.element.Row" id="newGameRow">
+    	<value class="org.mini2Dx.ui.element.Row" id="dialogueTextRow">
             <visibility>VISIBLE</visibility>
-            <children length="1">
-                <value class="org.mini2Dx.ui.element.TextButton" id="newGameButton">
-            	    <visibility>VISIBLE</visibility>
-                    <children length="1">
-                        <value class="org.mini2Dx.ui.element.Label">
-                            <visibility>VISIBLE</visibility>
-                            <text>New Game</text>
-                            <horizontalAlignment>CENTER</horizontalAlignment>
-                        </value>
-                    </children>
-            	</value>
-            </children>
         </value>
-    	<value class="org.mini2Dx.ui.element.Row" id="quitGameRow">
+    	<value class="org.mini2Dx.ui.element.Row" id="okButtonRow">
             <visibility>VISIBLE</visibility>
             <children length="1">
-                <value class="org.mini2Dx.ui.element.TextButton" id="quitGameButton">
+                <value class="org.mini2Dx.ui.element.TextButton" id="okButton">
             	    <visibility>VISIBLE</visibility>
                     <children length="1">
                         <value class="org.mini2Dx.ui.element.Label">
                             <visibility>VISIBLE</visibility>
-                            <text>Quit Game</text>
+                            <text>Ok</text>
                             <horizontalAlignment>CENTER</horizontalAlignment>
                         </value>
                     </children>

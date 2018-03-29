@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
+import org.mini2Dx.tiled.Layer;
 import org.mini2Dx.tiled.Tile;
 import org.mini2Dx.tiled.TiledMap;
 import org.mini2Dx.tiled.exception.TiledException;
@@ -40,17 +41,27 @@ public class BasicMap extends TiledMap implements Serializable {
 		grid.setTileBase(x, y, value);
 	}
 
-	public Tile getTile(int x, int y){
-		return getTile(x, y, 0);
+	public Tile getTile(int x, int y, int layer){
+		Tile tile = super.getTile(x, y, layer);
+		if (tile == null){
+			tile = new Tile();
+		}
+		return tile;
 	}
 	
 	public boolean isTileProperty(Location l, String property){
-		//logger.log(Level.INFO, "tileProperty: " + getTile(l.getLocX(), l.getLocY()).getProperty(property));
-		return getTile(l.getLocX(), l.getLocY()).getProperty(property).equals("true");
+		boolean isTileProperty = getTile(l.getLocX(), l.getLocY(), 0).getProperty(property).equals("true") || 
+				getTile(l.getLocX(), l.getLocY(), 1).getProperty(property).equals("true");
+		return isTileProperty;
 	}
 	
 	public boolean hasTileProperty(Location l, String property){
-		return getTile(l.getLocX(), l.getLocY()).containsProperty(property);
+		boolean hasTileProperty = getTile(l.getLocX(), l.getLocY(), 0).containsProperty(property) || 
+				getTile(l.getLocX(), l.getLocY(), 1).containsProperty(property);
+		for (int i = 0; i < this.getLayers().size(); i++){
+			hasTileProperty = hasTileProperty || getTile(l.getLocX(), l.getLocY(), i).containsProperty(property);
+		}
+		return hasTileProperty;
 	}
 	
 	public String isTileOccupied(Location l){
@@ -61,8 +72,8 @@ public class BasicMap extends TiledMap implements Serializable {
 		grid.clearCellOccupied(l);
 	}
 	
-	public void setTileProperty(Location l, String property){
-		getTile(l.getLocX(), l.getLocY()).setProperty(property, "true");
+	public void setTileProperty(Location l, int layer, String property){
+		getTile(l.getLocX(), l.getLocY(), layer).setProperty(property, "true");
 	}
 	
 	public void setCellOccupied(Location l, String occupier){

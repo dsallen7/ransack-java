@@ -14,11 +14,10 @@ public class ImageUtility {
 		List<Texture> lt = new ArrayList<Texture>();
 		for (int i = 0; i < 8*Constants.BLOCKSIZE; i+=Constants.BLOCKSIZE){
 			Pixmap p = new Pixmap(30, 30, spriteSheet.getFormat());
-			//Texture t = new Texture(30, 30, spriteSheet.getFormat());
+			int alpha = p.getPixel(0, 0);
 			p.drawPixmap(spriteSheet, 0, 0, i, 0, Constants.BLOCKSIZE, Constants.BLOCKSIZE);
-			lt.add(new Texture(p));
-			//t.draw(p, 0, 0);
-			//lt.add(t);
+			Texture t = new Texture(p);
+			lt.add(t);
 		}
 		for (int i = 0; i < 8*Constants.BLOCKSIZE; i+=Constants.BLOCKSIZE){
 			Pixmap p = new Pixmap(30, 30, spriteSheet.getFormat());

@@ -37,6 +37,18 @@ public class PlayableMap extends BasicMap {
 		}
 	}
 	
+	/*
+	 * Tiled methods
+	 *
+	@Override
+	public TiledObjectGroup getObjectGroup(String name) {
+		TiledObjectGroup tog = super.getObjectGroup(name)
+	}*/
+	
+	/*
+	 * Ransack methods
+	 */
+	
 	public void updateOffsets(Player p){
 		if (p.isOutsideBottomMargin(this)){
 			this.setOffsetY(-((this.dimensionY()*Constants.BLOCKSIZE)-(Constants.WINDOWSIZE*Constants.BLOCKSIZE)));
@@ -76,7 +88,7 @@ public class PlayableMap extends BasicMap {
 			return true;
 		}
 		//logger.log(Level.INFO, "x="+l.getLocX()+"y="+l.getLocY()+" isOccupied: " +isTileProperty(l, "isOccupied"));
-		boolean isMovable = isOnMap && isTileProperty(l, "isFloor");
+		boolean isMovable = isOnMap && !hasTileProperty(l, "isBlocker");
 		return isMovable;
 	}
 

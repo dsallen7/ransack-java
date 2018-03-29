@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="portal" color="#ff0000">
+  <property name="targetMap" type="string"/>
+  <property name="targetX" type="int" default="0"/>
+  <property name="targetY" type="int" default="0"/>
+ </objecttype>
+</objecttypes>

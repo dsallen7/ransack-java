@@ -16,15 +16,11 @@ import com.allen.silo.ransack.utils.FileUtility;
 public class World {
 	public static Logger logger = Logger.getLogger(World.class.getName());
 	
-	public static final String myMapName = "map1.tmx";
-	@Autowired
 	private PlayableMap currentMap;
 	
 	private HashMap<String, BasicMap> maps;
-	public final static String initialMap = "village1";
 	
 	public World() throws TiledException, IOException{
-		//currentMap = Mdx.di.getBean(PlayableMap.class);
 		maps = new HashMap<String, BasicMap>();
 		List<String> mapFileNameList = FileUtility.getMapFileNames();
 		for (String fileName : mapFileNameList){
@@ -52,9 +48,4 @@ public class World {
 	public static void descendStaire(){
 		
 	}
-	
-	public static String getMyMapName(){
-		return myMapName;
-	}
-
 }

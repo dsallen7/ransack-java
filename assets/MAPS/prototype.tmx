@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="30" tileheight="30" infinite="0" nextobjectid="3">
- <tileset firstgid="1" source="mastersheet.tsx"/>
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="30" tileheight="30" infinite="0" nextobjectid="1">
  <layer name="floor" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,33,33,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,33,33,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,33,33,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -27,11 +26,11 @@
  </layer>
  <layer name="blocker" width="20" height="20">
   <data encoding="csv">
-99,99,99,99,99,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-99,0,0,0,99,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-99,0,0,0,99,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-99,0,0,0,99,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-99,99,82,99,99,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -50,14 +49,5 @@
 </data>
  </layer>
  <objectgroup name="NPCs"/>
- <objectgroup name="Portals">
-  <object id="2" name="portal1" type="portal" x="75" y="138">
-   <properties>
-    <property name="targetMap" value="village1"/>
-    <property name="targetX" type="int" value="15"/>
-    <property name="targetY" type="int" value="4"/>
-   </properties>
-   <point/>
-  </object>
- </objectgroup>
+ <objectgroup name="Portals"/>
 </map>
