@@ -5,10 +5,12 @@ import java.util.logging.Logger;
 
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.ui.element.Image;
+import org.mini2Dx.tiled.renderer.OrthogonalTileLayerRenderer;
 
 import com.allen.silo.ransack.character.Cursor;
 import com.allen.silo.ransack.character.PlayableCharacter;
 import com.allen.silo.ransack.character.Player;
+import com.allen.silo.ransack.character.attributes.Location;
 import com.allen.silo.ransack.maps.BasicMap;
 import com.allen.silo.ransack.maps.PlayableMap;
 import com.allen.silo.ransack.utils.Constants;
@@ -23,18 +25,15 @@ public class Display implements Screen{
 	private Texture windowPaneT;
 	private Image windowPane;
 	private Graphics windowPaneG;
+	private OrthogonalTileLayerRenderer tileLayerRenderer;
+	private Location windowTopLeft;
+	private Location windowBottomRight;
+	private Location oldWindowTopLeft;
+	private Location oldWindowBottomRight;
 	
 	protected PlayableMap currentMap;
 		
 	public Display(){
-		this.setSpritesheet(new Spritesheet());
-		windowPaneT = new Texture(Constants.windowX, Constants.windowY, Pixmap.Format.Alpha);
-		windowPane = new Image(windowPaneT);
-		try {
-			//windowPaneG = new Graphics();
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, "SlickException in Display(): ", e);
-		}
 	}
 
 	@Override
@@ -82,14 +81,26 @@ public class Display implements Screen{
 	/*
 	 * Ransack methods
 	 */
-	
-
 	public void drawImageMap(Graphics g){
-		currentMap.draw(g, currentMap.getOffsetX(), currentMap.getOffsetY());
+		tileLayerRenderer.drawLayer(g, currentMap.getTileLayer(0), 0, 0, getWindowTopLeft().getLocX(),getWindowTopLeft().getLocY(),	10, 10);
+		tileLayerRenderer.drawLayer(g, currentMap.getTileLayer(1), 0, 0, getWindowTopLeft().getLocX(),getWindowTopLeft().getLocY(),	10, 10);
+		//currentMap.draw(g, currentMap.getOffsetX(), currentMap.getOffsetY());
 	}
 	
-	public void redrawMapWindow(BasicMap m){
-		
+	public void calculateMapWindow(){
+		int windowLeftX = Math.max(Math.min(this.currentMap.getActorLocation().getLocX()-5, this.currentMap.dimensionX()-10), 0);
+		int windowTopY = Math.max(Math.min(this.currentMap.getActorLocation().getLocY()-5, this.currentMap.dimensionY()-10), 0);
+		Location newTopLeft = new Location(windowLeftX, windowTopY);
+		if (windowTopLeft != null && (windowLeftX != windowTopLeft.getLocX() || windowTopY != windowTopLeft.getLocY()))
+			setOldWindowTopLeft(getWindowTopLeft());
+		/*
+		if (windowTopLeft != null && windowLeftX != windowTopLeft.getLocX())
+			oldWindowTopLeft = new Location(windowLeftX, windowTopLeft.getLocY());
+		if (windowTopLeft != null && windowTopY != windowTopLeft.getLocY())
+			oldWindowTopLeft = new Location(windowTopLeft.getLocX(), windowTopY);
+			*/
+		setWindowTopLeft( new Location(windowLeftX, windowTopY) );
+		setWindowBottomRight( new Location(windowLeftX+10, windowTopY + 10));
 	}
 	
 	public void drawPlayableCharacter(Graphics g, PlayableCharacter p){
@@ -109,7 +120,7 @@ public class Display implements Screen{
 			if( ((Player)p).isOutsideRightMargin(currentMap)){
 				playerRenderX = playerRenderX + currentMap.getOffsetX();
 			}
-			this.showActualPlayerRenderCoords(g, playerRenderX, playerRenderY);
+			//this.showActualPlayerRenderCoords(g, playerRenderX, playerRenderY);
 			g.drawSprite(p.getSprite(), playerRenderX, playerRenderY);
 		}else{
 			g.drawSprite(p.getSprite(), p.getPoint().getRenderX()+currentMap.getOffsetX(), p.getPoint().getRenderY()+currentMap.getOffsetY());
@@ -137,6 +148,12 @@ public class Display implements Screen{
 		g.drawString("Actual Y: " + y, 400, 460);
 	}
 	
+	public void showTopLeftAndOldTopLeft(Graphics g){
+		g.drawString("Left: " + this.windowTopLeft.getLocX() + " Top: " + this.getWindowTopLeft().getLocY(), 400, 450);
+		if (this.oldWindowTopLeft != null)
+			g.drawString("OldLeft: " + this.oldWindowTopLeft.getLocX() + " OldTop: " + this.getOldWindowTopLeft().getLocY(), 400, 460);
+	}
+	
 	public void showCursorLocation(Cursor c){
 		windowPaneG.drawString("Cursor X: " + c.getX(), 400, 400);
 		windowPaneG.drawString("Cursor Y: " + c.getY(), 400, 410);
@@ -162,6 +179,9 @@ public class Display implements Screen{
 	
 	public void setCurrentMap(BasicMap m){
 		this.currentMap = (PlayableMap) m;
+		if(tileLayerRenderer != null)
+			tileLayerRenderer.dispose();
+		tileLayerRenderer = new OrthogonalTileLayerRenderer(this.currentMap, false);
 	}
 		
 	public Image getWindowPane(){
@@ -174,5 +194,44 @@ public class Display implements Screen{
 
 	public void setSpritesheet(Spritesheet spritesheet) {
 		this.spritesheet = spritesheet;
+	}
+
+	public Location getWindowTopLeft() {
+		return windowTopLeft;
+	}
+
+	public void setWindowTopLeft(Location windowTopLeft) {
+		this.windowTopLeft = windowTopLeft;
+	}
+
+	public Location getWindowBottomRight() {
+		return windowBottomRight;
+	}
+
+	public void setWindowBottomRight(Location windowBottomRight) {
+		this.windowBottomRight = windowBottomRight;
+	}
+
+	public boolean isInWindow(Location location) {
+		return getWindowTopLeft().getLocX() <= location.getLocX() && 
+				location.getLocX() < getWindowBottomRight().getLocX() &&
+				getWindowTopLeft().getLocY() <= location.getLocY() && 
+				location.getLocY() < getWindowBottomRight().getLocY(); 
+	}
+
+	public Location getOldWindowTopLeft() {
+		return oldWindowTopLeft;
+	}
+
+	public void setOldWindowTopLeft(Location oldWindowTopLeft) {
+		this.oldWindowTopLeft = oldWindowTopLeft;
+	}
+
+	public Location getOldWindowBottomRight() {
+		return oldWindowBottomRight;
+	}
+
+	public void setOldWindowBottomRight(Location oldWindowBottomRight) {
+		this.oldWindowBottomRight = oldWindowBottomRight;
 	}
 }

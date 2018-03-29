@@ -1,5 +1,6 @@
 package com.allen.silo.ransack.handlers;
 
+import com.allen.silo.ransack.character.attributes.Direction;
 import com.allen.silo.ransack.character.attributes.Location;
 
 public class Event {
@@ -9,6 +10,7 @@ public class Event {
 	private String mapFrom;
 	private String mapTo;
 	private Location newL;
+	private Direction dir;
 	
 	public Event(String type, String data){
 		this.eventType = EventType.valueOf(type);
@@ -31,6 +33,15 @@ public class Event {
 		this.mapFrom = mapFrom;
 		this.mapTo = mapTo;
 		this.newL = newL;
+	}
+	/*
+	 * Intermap i.e. crossing border of one map into another
+	 */
+	public Event(String type, String mapFrom, String mapTo, Direction dir){
+		this.eventType = EventType.valueOf(type);
+		this.setMapFrom(mapFrom);
+		this.setMapTo(mapTo);
+		this.setDir(dir);
 	}
 	
 	public EventType getEventType(){
@@ -67,5 +78,13 @@ public class Event {
 
 	public void setNewL(Location newL) {
 		this.newL = newL;
+	}
+
+	public Direction getDir() {
+		return dir;
+	}
+
+	public void setDir(Direction dir) {
+		this.dir = dir;
 	}
 }

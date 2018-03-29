@@ -47,7 +47,7 @@ public class Ransack extends BasicGame implements InputProcessor{
 	
 	public static Logger logger = Logger.getLogger(Ransack.class.getName());
 	
-	public static final String GAME_IDENTIFIER = "com.allen.silo.crawler";
+	public static final String GAME_IDENTIFIER = "com.allen.silo.ransack";
     private AssetManager assetManager;
     private UiContainer uiContainer;
 	private static Display display;
@@ -65,17 +65,6 @@ public class Ransack extends BasicGame implements InputProcessor{
 	public static MessageHandlerImpl messageHandler;
 
 	public Ransack(){}
-
-	@Override
-	public void render(Graphics g){
-		display.drawImageMap(g);
-		for (PlayableCharacter pc : playables){
-			display.drawPlayableCharacter(g, pc);
-		}
-		display.showPlayerLocation(g, player);
-		display.showWindowOffsets(g, currentMap);
-        //uiContainer.render(g);
-	}
 
 	@Override
 	public void initialise(){
@@ -105,6 +94,7 @@ public class Ransack extends BasicGame implements InputProcessor{
 			messageBus.createOnUpdateExchange(messageHandler);
 	        			
 			setPlayables();
+			display.calculateMapWindow();
 		} catch ( TiledException te){
 			logger.log(Level.SEVERE, null, te);
 		}catch (IOException e) {
@@ -132,6 +122,13 @@ public class Ransack extends BasicGame implements InputProcessor{
 	    		break;
 	    	case SHOPPING:
 	    		break;
+	    	case INTERMAP:
+	    		logger.log(Level.INFO, "Intermap, direction: " + e.getDir());
+	    		Location newL = world.getIntermapLocation(e.getMapFrom(), e.getMapTo(), player.getLocation(), e.getDir());
+	    		if (newL != null){
+	    			changeCurrentMap(e.getMapTo(), newL);
+	    		}
+	    		break;
 	    	case STAIRSUP:
 	    		changeCurrentMap(e.getMapTo());
 	    		break;
@@ -142,7 +139,6 @@ public class Ransack extends BasicGame implements InputProcessor{
 	    		changeCurrentMap(e.getMapTo(), e.getNewL());
 	    		break;
 	    	}
-	    	return;
 	    }
 	    /*
 	     * Process player and NPC movements
@@ -153,11 +149,18 @@ public class Ransack extends BasicGame implements InputProcessor{
 				newL = pc.getRandomLocation();
 				processMove(pc, newL);
 			}else{
-				currentMap.setPlayerLocation(pc.getLocation());
+				currentMap.setActorLocation(pc.getLocation());
 			}
 			pc.move();
 		}
+		/*
+		 * Update map
+		 */
 		currentMap.updateOffsets(player);
+		/*
+		 * Update display
+		 */
+		display.calculateMapWindow();
 		/*
 		 * Process UI
 		 */
@@ -169,8 +172,33 @@ public class Ransack extends BasicGame implements InputProcessor{
 	            uiContainer.setTheme(assetManager.get(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class));
 	    }
 	    uiContainer.update(delta);
+	    /*
+	     * Update MessageBus
+	     */
 	    messageBus.update(delta);
 	    
+	}
+	
+	@Override
+	public void interpolate(float alpha) {
+		for(PlayableCharacter pc : playables){
+			pc.takeStep();
+			pc.getPoint().interpolate(null, alpha);
+		}
+        uiContainer.interpolate(alpha);
+	}
+	
+	@Override
+	public void render(Graphics g){
+		display.drawImageMap(g);
+		for (PlayableCharacter pc : playables){
+			if(display.isInWindow(pc.getLocation()))
+				display.drawPlayableCharacter(g, pc);
+		}
+		display.showTopLeftAndOldTopLeft(g);
+		//display.showPlayerLocation(g, player);
+		//display.showWindowOffsets(g, currentMap);
+        //uiContainer.render(g);
 	}
 	
 	@Override
@@ -186,15 +214,6 @@ public class Ransack extends BasicGame implements InputProcessor{
 		return true;
 	}
 	
-	@Override
-	public void interpolate(float alpha) {
-		for(PlayableCharacter pc : playables){
-			pc.takeStep();
-			pc.getPoint().interpolate(null, alpha);
-		}
-        uiContainer.interpolate(alpha);
-	}
-	
 	/*
 	 * Ransack methods
 	 */
@@ -208,18 +227,18 @@ public class Ransack extends BasicGame implements InputProcessor{
 				playables.add( npc );
 				currentMap.setCellOccupied(npc.getLocation(), npc.getName());
 			}else if(to.getType().equals("Player")){
-				if (currentMap.getPlayerLocation() == null)
+				if (currentMap.getActorLocation() == null)
 					newPlayerLocation = MathUtility.getGridCoordFromScreen(to.getX(), to.getY());
 			}
 		}
 		if (newPlayerLocation == null)
-			newPlayerLocation = currentMap.getPlayerLocation();
+			newPlayerLocation = currentMap.getActorLocation();
 		if (player == null){
 			player = new Player(newPlayerLocation, currentMap);
 		}else{
 			player.setLocation(newPlayerLocation);
 		}
-		currentMap.setPlayerLocation(newPlayerLocation);
+		currentMap.setActorLocation(newPlayerLocation);
 		player.enqueueMove(newPlayerLocation);
 		playables.add(player);
 		currentMap.setCellOccupied(player.getLocation(), player.getName());
@@ -254,7 +273,7 @@ public class Ransack extends BasicGame implements InputProcessor{
 		BasicMap m = world.changeCurrentMap(mapName);
 		setCurrentMap(m);
 		player.setLocation(target);
-		currentMap.setPlayerLocation(target);
+		currentMap.setActorLocation(target);
 		setPlayables();
 	}
 	

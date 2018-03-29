@@ -12,19 +12,21 @@ import com.allen.silo.ransack.character.attributes.Location;
 import com.allen.silo.ransack.display.Display;
 import com.allen.silo.ransack.maps.EditorMap;
 import com.allen.silo.ransack.utils.Constants;
+import com.allen.silo.ransack.world.World;
 import com.badlogic.gdx.Input;
 
 public class Editor extends BasicGame { 
 	
 	public static Logger logger = Logger.getLogger(Editor.class.getName());
+	public static final String GAME_IDENTIFIER = "com.allen.silo.ransack.seditor";
 
 	private Cursor cursor;
 	//public static AppGameContainer appgc;
 	private static Display display;
 	
 	private Toolbar toolbar;
-	
 	public EditorMap currentMap;
+	private static World world;
 	
 	public Editor() {}
 	
@@ -35,7 +37,8 @@ public class Editor extends BasicGame {
 		try {
 			currentMap = new EditorMap("");
 			display = new Display();
-			cursor = new Cursor(new Location(0,0), "", currentMap);
+			cursor = new Cursor(new Location(0,0), currentMap);
+			world = new World(currentMap);
 		} catch ( TiledException te){ 
 		}catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -50,19 +53,18 @@ public class Editor extends BasicGame {
 	}
 
 	@Override
+	public void interpolate(float arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void render(Graphics g){
-		/*
-		display.clear();
-		display.drawImageMap(currentMap);
-		//draw hero
-		display.drawCursor(currentMap, cursor);
-		display.showCursorLocation(cursor);
-		display.flush();
-		g.drawTexture(display.getWindowPane(), 50, 50);*/
-		//display.getWindowPane().draw(0,0);
+		display.drawImageMap(g);
 	}
 	
-	public void keyPressed(int key, char c){
+	@Override
+	public boolean keyDown(int key){
 		if (key == Input.Keys.ESCAPE) {
 			System.exit(0);
 		}
@@ -80,27 +82,10 @@ public class Editor extends BasicGame {
 		if (Constants.MOVE_KEYS.contains(key)){
 			move(key);
 		}
+		return true;
 	}
 	
 	public void move(int key){
 		cursor.move(key, currentMap);
-	}
-	
-	public static void main(String[] args){
-		/*
-		try{
-			logger.log(Level.INFO, "Launching editor...");
-			appgc = new AppGameContainer(new Editor("Crawler Editor"));
-			appgc.setDisplayMode(Constants.editorWindowX, Constants.editorWindowY, false);
-			appgc.start();
-		}catch (SlickException ex){
-			logger.log(Level.SEVERE, null, ex);
-		}*/
-	}
-	
-	@Override
-	public void interpolate(float arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }

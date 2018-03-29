@@ -2,6 +2,7 @@ package com.allen.silo.ransack.handlers;
 
 import org.mini2Dx.minibus.MessageData;
 
+import com.allen.silo.ransack.character.attributes.Direction;
 import com.allen.silo.ransack.character.attributes.Location;
 
 public class MessageDataImpl implements MessageData {
@@ -11,6 +12,7 @@ public class MessageDataImpl implements MessageData {
 	private String mapFrom;
 	private String mapTo;
 	private Location newL;
+	private Direction dir;
 	
 	public MessageDataImpl(int value, String data){
 		this.value = value;
@@ -32,6 +34,15 @@ public class MessageDataImpl implements MessageData {
 		this.setMapFrom(mapFrom);
 		this.setMapTo(mapTo);
 		this.setNewL(newL);
+	}
+	/*
+	 * Intermap i.e. crossing border of one map into another
+	 */
+	public MessageDataImpl(int value, String mapFrom, String mapTo, Direction dir){
+		this.value = value;
+		this.setMapFrom(mapFrom);
+		this.setMapTo(mapTo);
+		this.setDir(dir);
 	}
 
 	public int getValue() {
@@ -64,6 +75,12 @@ public class MessageDataImpl implements MessageData {
 
 	public void setNewL(Location newL) {
 		this.newL = newL;
+	}
+	public Direction getDir() {
+		return dir;
+	}
+	public void setDir(Direction dir) {
+		this.dir = dir;
 	}
 
 }

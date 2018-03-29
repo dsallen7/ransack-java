@@ -8,6 +8,7 @@ import org.mini2Dx.tiled.TiledObject;
 import org.mini2Dx.tiled.exception.TiledException;
 
 import com.allen.silo.ransack.character.Player;
+import com.allen.silo.ransack.character.attributes.Direction;
 import com.allen.silo.ransack.character.attributes.Location;
 import com.allen.silo.ransack.handlers.EventType;
 import com.allen.silo.ransack.handlers.MessageDataImpl;
@@ -20,7 +21,13 @@ public class PlayableMap extends BasicMap {
 
 	private static final long serialVersionUID = 1202377979271661004L;
 	public static Logger logger = Logger.getLogger(PlayableMap.class.getName());
-	private Location playerLocation = null;
+	private Location actorLocation = null;
+	private String up;
+	private String down;
+	private String north;
+	private String south;
+	private String east;
+	private String west;
 	
 	public PlayableMap(String fileName) throws TiledException, IOException{
 		super(fileName);
@@ -71,6 +78,19 @@ public class PlayableMap extends BasicMap {
 		if (l == null)
 			return false;
 		boolean isOnMap = super.isMovable(l);
+		if (isTopEdge(l)){
+			//Location crossMapLocation = world.getCrossMapLocation(l, this.getName(), Direction.NORTH)
+			Ransack.messageBus.broadcast(EventType.INTERMAP.toString(), new MessageDataImpl(0, this.getName(), this.getProperty("north"), Direction.NORTH) );
+		}
+		if (isBottomEdge(l)){
+			Ransack.messageBus.broadcast(EventType.INTERMAP.toString(), new MessageDataImpl(0, this.getName(), this.getProperty("south"), Direction.SOUTH) );
+		}
+		if (isRightEdge(l)){
+			Ransack.messageBus.broadcast(EventType.INTERMAP.toString(), new MessageDataImpl(0, this.getName(), this.getProperty("east"), Direction.EAST) );
+		}
+		if (isLeftEdge(l)){
+			Ransack.messageBus.broadcast(EventType.INTERMAP.toString(), new MessageDataImpl(0, this.getName(), this.getProperty("west"), Direction.WEST) );
+		}
 		if (!isOnMap){
 			return isOnMap;
 		}
@@ -88,15 +108,19 @@ public class PlayableMap extends BasicMap {
 			return true;
 		}
 		//logger.log(Level.INFO, "x="+l.getLocX()+"y="+l.getLocY()+" isOccupied: " +isTileProperty(l, "isOccupied"));
-		boolean isMovable = isOnMap && !hasTileProperty(l, "isBlocker");
+		boolean isMovable = isOnMap && !isCellBlocker(l);
 		return isMovable;
 	}
-
-	public Location getPlayerLocation() {
-		return playerLocation;
+	
+	public boolean isCellBlocker(Location l){
+		return hasTileProperty(l, "isBlocker");
 	}
 
-	public void setPlayerLocation(Location playerLocation) {
-		this.playerLocation = playerLocation;
+	public Location getActorLocation() {
+		return actorLocation;
+	}
+
+	public void setActorLocation(Location actorLocation) {
+		this.actorLocation = actorLocation;
 	}
 }

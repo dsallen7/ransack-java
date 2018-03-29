@@ -22,6 +22,10 @@ public class BasicMap extends TiledMap implements Serializable {
 	protected int offsetX;
 	protected int offsetY;
 	private String name;
+	
+	public BasicMap(){
+		super(FileUtility.loadMap("prototype"));
+	}
 
 	public BasicMap(String fileName) throws IOException, TiledException{
 		super(FileUtility.loadMap(fileName));
@@ -81,8 +85,24 @@ public class BasicMap extends TiledMap implements Serializable {
 	}
 	
 	public boolean isMovable(Location l){
-		boolean isEdge = !(l.getLocX() < 0 || l.getLocY() < 0 || l.getLocX() > getWidth()-1 || l.getLocY() > getHeight()-1 );
+		boolean isEdge = !(isLeftEdge(l) || isTopEdge(l) || isRightEdge(l) || isBottomEdge(l) );
 		return isEdge;
+	}
+	
+	public boolean isTopEdge(Location l){
+		return l.getLocY() < 0;
+	}
+	
+	public boolean isBottomEdge(Location l){
+		return l.getLocY() > getHeight()-1;
+	}
+	
+	public boolean isLeftEdge(Location l){
+		return l.getLocX() < 0;
+	}
+	
+	public boolean isRightEdge(Location l){
+		return l.getLocX() > getWidth()-1;
 	}
 
 	public int getOffsetX() {

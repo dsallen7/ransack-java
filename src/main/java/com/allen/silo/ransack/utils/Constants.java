@@ -33,6 +33,7 @@ public interface Constants {
 	public static final String BATTLE = "BATTLE";
 	public static final String SHOPPING = "SHOPPING";
 	public static final String MINIGAME = "MINIGAME";
+	public static final String INTERMAP = "INTERMAP";
 	public static final String PORTAL = "PORTAL";
 	public static final String STAIRSUP = "STAIRSUP";
 	public static final String STAIRSDOWN = "STAIRSDOWN";

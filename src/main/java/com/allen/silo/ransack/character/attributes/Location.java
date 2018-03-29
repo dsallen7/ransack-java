@@ -29,5 +29,9 @@ public class Location {
 	public void setLocY(int locY) {
 		this.locY = locY;
 	}
+	
+	public boolean equals(Location l){
+		return l.getLocX() == this.getLocX() && l.getLocY() == this.getLocY();
+	}
 
 }

@@ -27,6 +27,9 @@ public class MessageHandlerImpl implements MessageHandler {
 			break;
 		case Constants.MINIGAME:
 			break;
+		case Constants.INTERMAP:
+			Ransack.enqueueEvent(new Event(Constants.INTERMAP, m.getMapFrom(), m.getMapTo(), m.getDir()));
+			break;
 		case Constants.PORTAL:
 			Ransack.enqueueEvent(new Event(Constants.PORTAL, m.getMapFrom(), m.getMapTo(), m.getNewL() ));
 			break;

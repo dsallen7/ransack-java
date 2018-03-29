@@ -39,7 +39,9 @@ public abstract class BaseCharacter {
 		mailbox = new LinkedList<String>();
 	}
 	
-	BaseCharacter(){}
+	BaseCharacter(Location l, BasicMap m){
+		
+	}
 	
 	BaseCharacter(Location l, String name, BasicMap m){
 		
