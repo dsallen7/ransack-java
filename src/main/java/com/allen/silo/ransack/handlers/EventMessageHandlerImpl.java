@@ -1,6 +1,5 @@
 package com.allen.silo.ransack.handlers;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.mini2Dx.minibus.MessageData;
@@ -10,16 +9,22 @@ import org.mini2Dx.minibus.MessageHandler;
 import com.allen.silo.ransack.main.Ransack;
 import com.allen.silo.ransack.utils.Constants;
 
-public class MessageHandlerImpl implements MessageHandler {
-	public static Logger logger = Logger.getLogger(MessageHandlerImpl.class.getName());
+public class EventMessageHandlerImpl implements MessageHandler {
+	public static Logger logger = Logger.getLogger(EventMessageHandlerImpl.class.getName());
 
 	@Override
 	public void onMessageReceived(String messageType, MessageExchange source, MessageExchange receiver, MessageData messageData) {
-		logger.log(Level.INFO, "messageType: " + messageType);
-		MessageDataImpl m = (MessageDataImpl)messageData;
+		//logger.log(Level.INFO, "messageType: " + messageType);
+		EventMessageDataImpl m = (EventMessageDataImpl)messageData;
 		switch(messageType){
-		case Constants.DIALOG:
-			Ransack.enqueueEvent(new Event(Constants.DIALOG, m.getData()) );
+		case Constants.RETURNCONTROL:
+			Ransack.enqueueEvent(new Event(Constants.RETURNCONTROL));
+		case Constants.OPENDIALOGUE:
+			if (!m.getDialogueFrom().equalsIgnoreCase(m.getDialogueTo()))
+				Ransack.enqueueEvent(new Event(Constants.OPENDIALOGUE, m.getDialogueFrom(), m.getDialogueTo(), m.getData()) );
+			break;
+		case Constants.CLOSEDIALOGUE:
+			Ransack.enqueueEvent(new Event(Constants.CLOSEDIALOGUE));
 			break;
 		case Constants.BATTLE:
 			break;

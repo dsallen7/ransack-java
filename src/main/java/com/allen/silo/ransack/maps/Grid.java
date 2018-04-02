@@ -1,9 +1,8 @@
 package com.allen.silo.ransack.maps;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.allen.silo.ransack.character.attributes.Location;
+import com.allen.silo.ransack.character.attributes.MapLocation;
 
 public class Grid {
 	public static Logger logger = Logger.getLogger(Grid.class.getName());
@@ -22,19 +21,19 @@ public class Grid {
 		}
 	}
 	
-	public Cell getCell(Location l){
+	public Cell getCell(MapLocation l){
 		return grid[l.getLocX()][l.getLocY()];
 	}
 	
-	public void setCellOccupied(Location l, String occupier){
+	public void setCellOccupied(MapLocation l, String occupier){
 		grid[l.getLocX()][l.getLocY()].setOccupied(occupier);
 	}
 	
-	public String getCellOccupied(Location l){
+	public String getCellOccupied(MapLocation l){
 		return grid[l.getLocX()][l.getLocY()].getOccupied();
 	}
 	
-	public void clearCellOccupied(Location l){
+	public void clearCellOccupied(MapLocation l){
 		grid[l.getLocX()][l.getLocY()].setOccupied(null);
 	}
 

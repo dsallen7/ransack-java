@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import org.mini2Dx.tiled.exception.TiledException;
 
-import com.allen.silo.ransack.character.attributes.Location;
+import com.allen.silo.ransack.character.attributes.MapLocation;
 
 public class EditorMap extends BasicMap {
 
@@ -22,7 +22,7 @@ public class EditorMap extends BasicMap {
 		}
 	}
 	
-	public boolean isMovable(Location l){
+	public boolean isMovable(MapLocation l){
 		return super.isMovable(l);
 	}
 

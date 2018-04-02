@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<data id="dialogueModal">
+    <visibility>HIDDEN</visibility>
+	<horizontalLayout>xs-12c</horizontalLayout>
+	<flexDirection>COLUMN_REVERSE</flexDirection>
+	<children length="2">
+		<value class="org.mini2Dx.ui.element.Column" id="dialogueImageColumn">
+			<visibility>VISIBLE</visibility>
+			<children length="1">
+				<value class="org.mini2Dx.ui.element.Image" id="dialogueImage">
+					<visibility>VISIBLE</visibility>
+				</value>
+			</children>
+		</value>
+		<value class="org.mini2Dx.ui.element.Column" id="dialogueContentsColumn">
+			<visibility>VISIBLE</visibility>
+			<children length="2">
+				<value class="org.mini2Dx.ui.element.Row" id="dialogueTextColumn">
+					<visibility>VISIBLE</visibility>
+					<children length="1">
+						<value class="org.mini2Dx.ui.element.Label" id="dialogueText">
+							<visibility>VISIBLE</visibility>
+							<text>insert text here</text>
+						</value>
+					</children>
+				</value>
+				<value class="org.mini2Dx.ui.element.Row" id="okButtonRow">
+					<visibility>VISIBLE</visibility>
+					<children length="1">
+						<value class="org.mini2Dx.ui.element.TextButton" id="dialogueOkButton">
+							<visibility>VISIBLE</visibility>
+							<children length="1">
+								<value class="org.mini2Dx.ui.element.Label">
+									<visibility>VISIBLE</visibility>
+									<text>Ok</text>
+									<horizontalAlignment>CENTER</horizontalAlignment>
+								</value>
+							</children>
+						</value>
+					</children>
+				</value>
+			</children>
+		</value>
+	</children>
+</data>

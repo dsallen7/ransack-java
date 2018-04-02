@@ -1,99 +1,98 @@
 package com.allen.silo.ransack.main;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.mini2Dx.core.Mdx;
-import org.mini2Dx.core.assets.FallbackFileHandleResolver;
 import org.mini2Dx.core.di.annotation.Autowired;
+import org.mini2Dx.core.di.annotation.Prototype;
 import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.serialization.SerializationException;
 import org.mini2Dx.minibus.MessageBus;
 import org.mini2Dx.tiled.TiledObject;
 import org.mini2Dx.tiled.exception.TiledException;
-import org.mini2Dx.ui.UiContainer;
-import org.mini2Dx.ui.UiThemeLoader;
-import org.mini2Dx.ui.element.AlignedModal;
 import org.mini2Dx.ui.style.UiTheme;
 
 import com.allen.silo.ransack.character.NonPlayerCharacter;
 import com.allen.silo.ransack.character.PlayableCharacter;
 import com.allen.silo.ransack.character.Player;
-import com.allen.silo.ransack.character.attributes.Location;
-import com.allen.silo.ransack.display.Display;
+import com.allen.silo.ransack.character.attributes.MapLocation;
+import com.allen.silo.ransack.display.OverworldDisplay;
+import com.allen.silo.ransack.display.RansackAssetManager;
+import com.allen.silo.ransack.display.ui.RansackUiContainer;
 import com.allen.silo.ransack.handlers.Event;
+import com.allen.silo.ransack.handlers.EventMessageDataImpl;
+import com.allen.silo.ransack.handlers.EventMessageHandlerImpl;
 import com.allen.silo.ransack.handlers.EventType;
-import com.allen.silo.ransack.handlers.MessageDataImpl;
-import com.allen.silo.ransack.handlers.MessageHandlerImpl;
+import com.allen.silo.ransack.handlers.LogMessageHandlerImpl;
 import com.allen.silo.ransack.maps.BasicMap;
 import com.allen.silo.ransack.maps.PlayableMap;
 import com.allen.silo.ransack.utils.Constants;
 import com.allen.silo.ransack.utils.FileUtility;
 import com.allen.silo.ransack.utils.MathUtility;
 import com.allen.silo.ransack.world.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 
+@Prototype
 public class Ransack extends BasicGame implements InputProcessor{
 	
 	public static Logger logger = Logger.getLogger(Ransack.class.getName());
 	
 	public static final String GAME_IDENTIFIER = "com.allen.silo.ransack";
-    private AssetManager assetManager;
-    private UiContainer uiContainer;
-	private static Display display;
+    
+	@Autowired
+	private RansackAssetManager assetManager;
+    private RansackUiContainer uiContainer;
+	private static OverworldDisplay display;
 	
 	public static World world;
-	@Autowired
 	private PlayableMap currentMap;
 	private Player player;
+	private HashMap<String, PlayableCharacter> playables;
 	
 	private static Queue<Event> eventQueue;
+	//private static Queue<Dialogue> dialogueQueue;
 	
-	private ArrayList<PlayableCharacter> playables;
-	
-	public static MessageBus messageBus;
-	public static MessageHandlerImpl messageHandler;
+	public static MessageBus eventMessageBus;
+	public static EventMessageHandlerImpl eventMessageHandler;
 
+	public static MessageBus logMessageBus;
+	public static LogMessageHandlerImpl logMessageHandler;
+	
+	public static FileHandleResolver fileHandleResolver;
+
+	static{
+        eventQueue = new LinkedList<Event>();
+        
+		eventMessageBus = new MessageBus();
+		eventMessageHandler = new EventMessageHandlerImpl();
+		eventMessageBus.createOnUpdateExchange(eventMessageHandler);
+	}
+	
 	public Ransack(){}
 
 	@Override
 	public void initialise(){
 		try {
+			Mdx.di.scan(GAME_IDENTIFIER);
 			world = new World();
 			currentMap = (PlayableMap) world.getCurrentMap();
-	        //Create fallback file resolver so we can use the default mini2Dx-ui theme
-	        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(), new InternalFileHandleResolver());
-	        //Create asset manager for loading resources
-	        assetManager = new AssetManager(fileHandleResolver);
-	        //Add mini2Dx-ui theme loader
-	        assetManager.setLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
-	        //Load default theme
-	        assetManager.load(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class);
+	        assetManager = Mdx.di.getBean(RansackAssetManager.class);
 	        
-	        eventQueue = new LinkedList<Event>();
-	        
-	        AlignedModal modal = Mdx.xml.fromXml(FileUtility.getUIAsset("startgamemodal.xml").reader(), AlignedModal.class);
-
-	        uiContainer = new UiContainer(this, assetManager);
-	        uiContainer.add(modal);
-			display = new Display();
-			display.setCurrentMap(currentMap);
-			
-			messageBus = new MessageBus();
-			messageHandler = new MessageHandlerImpl();
-			messageBus.createOnUpdateExchange(messageHandler);
+	        uiContainer = new RansackUiContainer(this, assetManager);
 	        			
 			setPlayables();
+
+	        display = new OverworldDisplay(uiContainer, currentMap, player);
+			
 			display.calculateMapWindow();
 		} catch ( TiledException te){
 			logger.log(Level.SEVERE, null, te);
@@ -109,12 +108,48 @@ public class Ransack extends BasicGame implements InputProcessor{
 	@Override
 	public void update(float delta){
 		/*
+		 * Process UI
+		 */
+		try{
+	        if(!assetManager.update()) {
+	            //Wait for asset manager to finish loading assets
+	            return;
+		    }
+		}catch (Exception ex){
+			ex.printStackTrace();
+			throw ex;
+		}
+	    if(!uiContainer.isThemeApplied()) {
+	    	uiContainer.setTheme(assetManager.get("ransack-mdx-theme.json", UiTheme.class));
+	    }
+	    uiContainer.update(delta);
+	    if (uiContainer.isWaiting()){
+	    	return;
+	    }else{
+	    	Gdx.input.setInputProcessor(this);
+	    }
+
+	    /*
+	     * Process player and NPC movements
+	     */
+		for (PlayableCharacter pc : playables.values()){
+			pc.update(currentMap);
+		}
+		/*
 		 * Process Ransack Events
 		 */
 	    Event e = getEvent();
 	    if (e != null){
 	    	switch(e.getEventType()){
-	    	case DIALOG:
+	    	case RETURNCONTROL:
+	    		returnControl();
+	    		break;
+	    	case OPENDIALOGUE:
+				//currentMap.playables.get(isCellOccupied).face(pc.getLocation());
+	    		uiContainer.openDialogue(e.getData(), playables.get(e.getDialogueTo()).getFace() );
+	    		break;
+	    	case CLOSEDIALOGUE:
+	    		uiContainer.closeDialogue();
 	    		break;
 	    	case BATTLE:
 	    		break;
@@ -124,7 +159,7 @@ public class Ransack extends BasicGame implements InputProcessor{
 	    		break;
 	    	case INTERMAP:
 	    		logger.log(Level.INFO, "Intermap, direction: " + e.getDir());
-	    		Location newL = world.getIntermapLocation(e.getMapFrom(), e.getMapTo(), player.getLocation(), e.getDir());
+	    		MapLocation newL = world.getIntermapLocation(e.getMapFrom(), e.getMapTo(), player.getLocation(), e.getDir());
 	    		if (newL != null){
 	    			changeCurrentMap(e.getMapTo(), newL);
 	    		}
@@ -140,70 +175,36 @@ public class Ransack extends BasicGame implements InputProcessor{
 	    		break;
 	    	}
 	    }
-	    /*
-	     * Process player and NPC movements
-	     */
-		for (PlayableCharacter pc : playables){
-			if(pc.isNPC()){
-				Location newL = null;
-				newL = pc.getRandomLocation();
-				processMove(pc, newL);
-			}else{
-				currentMap.setActorLocation(pc.getLocation());
-			}
-			pc.move();
-		}
 		/*
-		 * Update map
+		 * Update display and map
 		 */
+		display.update(delta);
 		currentMap.updateOffsets(player);
-		/*
-		 * Update display
-		 */
-		display.calculateMapWindow();
-		/*
-		 * Process UI
-		 */
-        if(!assetManager.update()) {
-            //Wait for asset manager to finish loading assets
-            return;
-	    }
-	    if(!uiContainer.isThemeApplied()) {
-	            uiContainer.setTheme(assetManager.get(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class));
-	    }
-	    uiContainer.update(delta);
 	    /*
 	     * Update MessageBus
 	     */
-	    messageBus.update(delta);
-	    
+	    eventMessageBus.update(delta);
 	}
 	
 	@Override
 	public void interpolate(float alpha) {
-		for(PlayableCharacter pc : playables){
-			pc.takeStep();
+		for(PlayableCharacter pc : playables.values()){
+			//pc.takeStep();
 			pc.getPoint().interpolate(null, alpha);
 		}
+		display.interpolateMap();
         uiContainer.interpolate(alpha);
 	}
 	
 	@Override
 	public void render(Graphics g){
-		display.drawImageMap(g);
-		for (PlayableCharacter pc : playables){
-			if(display.isInWindow(pc.getLocation()))
-				display.drawPlayableCharacter(g, pc);
-		}
-		display.showTopLeftAndOldTopLeft(g);
-		//display.showPlayerLocation(g, player);
-		//display.showWindowOffsets(g, currentMap);
-        //uiContainer.render(g);
+		display.render(g, playables);
 	}
 	
 	@Override
 	public boolean keyDown(int key){
 		if (key == Input.Keys.ESCAPE) {
+			this.dispose();
 			System.exit(0);
 		}
 		if (key == Input.Keys.F1) {
@@ -211,24 +212,45 @@ public class Ransack extends BasicGame implements InputProcessor{
 		if (Constants.MOVE_KEYS.contains(key)){
 			playerMove(key);
 		}
+		if (key == Input.Keys.H){
+			player.incrementHP(3);
+		}
+		if (key == Input.Keys.G){
+			player.decrementHP(3);
+		}
+		if (key == Input.Keys.M){
+			player.incrementMP(3);
+		}
+		if (key == Input.Keys.N){
+			player.decrementMP(3);
+		}
 		return true;
 	}
+	
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button){
+				
+		return true;
+	}
+		
 	
 	/*
 	 * Ransack methods
 	 */
-	
 	public void setPlayables(){
-		playables = new ArrayList<PlayableCharacter>();
-		Location newPlayerLocation = null;
+		playables = new HashMap<String, PlayableCharacter>();
+		MapLocation newPlayerLocation = null;
+
 		for (TiledObject to : currentMap.getObjectGroup("NPCs").getObjects()){
 			if(to.getType().equals("NPC")){
-				NonPlayerCharacter npc = new NonPlayerCharacter(MathUtility.getGridCoordFromScreen(to.getX(), to.getY()), to.getName(), currentMap);
-				playables.add( npc );
+				NonPlayerCharacter npc = new NonPlayerCharacter(MathUtility.getMapLocationFromScreenCoords(to.getX(), to.getY()), FileUtility.loadCharacterScript(to.getName()+".xml"), currentMap);
+				playables.put( to.getName(), npc );
 				currentMap.setCellOccupied(npc.getLocation(), npc.getName());
 			}else if(to.getType().equals("Player")){
-				if (currentMap.getActorLocation() == null)
-					newPlayerLocation = MathUtility.getGridCoordFromScreen(to.getX(), to.getY());
+				if (currentMap.getActorLocation() == null){
+					newPlayerLocation = MathUtility.getMapLocationFromScreenCoords(to.getX(), to.getY());
+					currentMap.setActorLocation(newPlayerLocation);
+				}
 			}
 		}
 		if (newPlayerLocation == null)
@@ -239,29 +261,19 @@ public class Ransack extends BasicGame implements InputProcessor{
 			player.setLocation(newPlayerLocation);
 		}
 		currentMap.setActorLocation(newPlayerLocation);
-		player.enqueueMove(newPlayerLocation);
-		playables.add(player);
+		//player.enqueueMove(newPlayerLocation);
+		playables.put("player", player);
 		currentMap.setCellOccupied(player.getLocation(), player.getName());
 	}
 		
 	public void playerMove(int key){
-		processMove(player, player.getNewLocation(key, player.getLocation()));
+		player.processMove(player.getNewLocation(key, player.getLocation()), currentMap);
 	}
 	
-	public void processMove(PlayableCharacter pc, Location newL){
-		if (currentMap.isMovable(newL)){
-			String isCellOccupied = currentMap.isTileOccupied(newL);
-			if( isCellOccupied != null){
-				//logger.log(Level.INFO, "Tile occupied by: " + isCellOccupied);
-				Ransack.messageBus.broadcast(EventType.DIALOG.toString(), new MessageDataImpl(0, "Hello"));//"from: " + this.name + " to: " + isCellOccupied
-				
-				return;
-			}
-			currentMap.setCellOccupied(newL, pc.getName());
-			currentMap.clearCellOccupied(pc.getLocation());	
-			pc.enqueueMove(newL);
-		}
-	}
+	
+	/*
+	 * Map management methods
+	 */
 	
 	public void changeCurrentMap(String mapName){
 		BasicMap m = world.changeCurrentMap(mapName);
@@ -269,7 +281,7 @@ public class Ransack extends BasicGame implements InputProcessor{
 		setPlayables();
 	}
 	
-	public void changeCurrentMap(String mapName, Location target){
+	public void changeCurrentMap(String mapName, MapLocation target){
 		BasicMap m = world.changeCurrentMap(mapName);
 		setCurrentMap(m);
 		player.setLocation(target);
@@ -280,6 +292,15 @@ public class Ransack extends BasicGame implements InputProcessor{
 	public void setCurrentMap(BasicMap m){
 		this.currentMap = (PlayableMap) m;
 		display.setCurrentMap(m);		
+	}
+	
+	/*
+	 * UI Methods
+	 */
+	
+	
+	public void returnControl(){
+		Gdx.input.setInputProcessor(this);		
 	}
 	
 	public void endScreen(){

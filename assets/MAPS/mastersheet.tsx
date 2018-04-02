@@ -447,14 +447,14 @@
  </tile>
  <tile id="68">
   <properties>
-   <property name="isBlocker" type="bool" value="true"/>
+   <property name="isCeiling" type="bool" value="true"/>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
   </properties>
  </tile>
  <tile id="69">
   <properties>
-   <property name="isBlocker" type="bool" value="true"/>
+   <property name="isCeiling" type="bool" value="true"/>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
   </properties>

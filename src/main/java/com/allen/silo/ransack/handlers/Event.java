@@ -1,19 +1,33 @@
 package com.allen.silo.ransack.handlers;
 
 import com.allen.silo.ransack.character.attributes.Direction;
-import com.allen.silo.ransack.character.attributes.Location;
+import com.allen.silo.ransack.character.attributes.MapLocation;
 
 public class Event {
 	
 	private EventType eventType;
 	private String data;
+	private String dialogueFrom;
+	private String dialogueTo;
 	private String mapFrom;
 	private String mapTo;
-	private Location newL;
+	private MapLocation newL;
 	private Direction dir;
 	
-	public Event(String type, String data){
+	/*
+	 * Single-arg (close dialogue, ...)
+	 */
+	public Event(String type){
 		this.eventType = EventType.valueOf(type);
+	}
+	
+	/*
+	 * Open Dialogue
+	 */	
+	public Event(String type, String dialogueFrom, String dialogueTo, String data){
+		this.eventType = EventType.valueOf(type);
+		this.dialogueFrom = dialogueFrom;
+		this.dialogueTo = dialogueTo;
 		this.data = data;
 	}
 	
@@ -28,7 +42,7 @@ public class Event {
 	/*
 	 * Portal
 	 */
-	public Event(String type, String mapFrom, String mapTo, Location newL){
+	public Event(String type, String mapFrom, String mapTo, MapLocation newL){
 		this.eventType = EventType.valueOf(type);
 		this.mapFrom = mapFrom;
 		this.mapTo = mapTo;
@@ -72,11 +86,11 @@ public class Event {
 		this.mapTo = mapTo;
 	}
 
-	public Location getNewL() {
+	public MapLocation getNewL() {
 		return newL;
 	}
 
-	public void setNewL(Location newL) {
+	public void setNewL(MapLocation newL) {
 		this.newL = newL;
 	}
 
@@ -86,5 +100,21 @@ public class Event {
 
 	public void setDir(Direction dir) {
 		this.dir = dir;
+	}
+
+	public String getDialogueFrom() {
+		return dialogueFrom;
+	}
+
+	public void setDialogueFrom(String dialogueFrom) {
+		this.dialogueFrom = dialogueFrom;
+	}
+
+	public String getDialogueTo() {
+		return dialogueTo;
+	}
+
+	public void setDialogueTo(String dialogueTo) {
+		this.dialogueTo = dialogueTo;
 	}
 }

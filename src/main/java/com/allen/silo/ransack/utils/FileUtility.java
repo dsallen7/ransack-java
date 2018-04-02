@@ -19,7 +19,7 @@ public class FileUtility {
 	public static Logger logger = Logger.getLogger(FileUtility.class.getName());
 	
 	public static Script loadCharacterScript(String fileName){
-		FileHandle file = getAsset(Constants.LOCAL_SCRIPTS_PATH+fileName);
+		FileHandle file = getAsset(Constants.SCRIPTS_PATH+fileName);
 		JAXBContext jaxbContext;
 		Script script = null;
 		try {
@@ -39,7 +39,7 @@ public class FileUtility {
 	public static List<String> getMapFileNames(){
 		List<String> mapFileNameList = new ArrayList<String>();
 		
-		File folder = new File(Constants.LOCAL_ASSETS_PATH+Constants.LOCAL_MAPS_PATH);
+		File folder = new File(Constants.ABSOLUTE_ASSETS_PATH+Constants.MAPS_PATH);
 		File[] listOfFiles = folder.listFiles();
 		
 		for (File f : listOfFiles){
@@ -51,19 +51,27 @@ public class FileUtility {
 	
 	
 	public static FileHandle loadMap(String fileName){
-		return getAsset(Constants.LOCAL_MAPS_PATH+fileName+".tmx");
+		return getAsset(Constants.MAPS_PATH+fileName+".tmx");
+	}
+	
+	public static FileHandle loadUIImageFile(String fileName){
+		return getAsset(Constants.UI_TEXTURE_PATH+fileName);
+	}
+	
+	public static FileHandle loadFont(String fileName){
+		return getAsset(Constants.FONTS_PATH+fileName+".tmx");
 	}
 	
 	public static FileHandle getCharSheet(String fileName){
-		return getAsset(Constants.LOCAL_CHARSHEET_PATH+fileName);
+		return getAsset(Constants.CHARSHEET_PATH+fileName);
 	}
 	
 	public static FileHandle getUIAsset(String fileName){
-		return getAsset(Constants.LOCAL_UI_PATH+fileName);
+		return getAsset(Constants.UI_PATH+fileName);
 	}
 	
 	public static FileHandle getAsset(String fileName){
-		return new FileHandle(Constants.LOCAL_ASSETS_PATH+fileName);
+		return new FileHandle(Constants.ABSOLUTE_ASSETS_PATH+fileName);
 	}
 
 }

@@ -1,18 +1,18 @@
 package com.allen.silo.ransack.character.attributes;
 
-public class Location {
+public class MapLocation {
 	
 	private int locX;
 	private int locY;
 	
-	public Location(){}
+	public MapLocation(){}
 	
-	public Location(int x, int y){
+	public MapLocation(int x, int y){
 		this.setLocX(x);
 		this.setLocY(y);
 	}
 	
-	public Location(float x, float y){
+	public MapLocation(float x, float y){
 		this.setLocX((int)x);
 		this.setLocY((int)y);
 	}
@@ -30,7 +30,7 @@ public class Location {
 		this.locY = locY;
 	}
 	
-	public boolean equals(Location l){
+	public boolean equals(MapLocation l){
 		return l.getLocX() == this.getLocX() && l.getLocY() == this.getLocY();
 	}
 

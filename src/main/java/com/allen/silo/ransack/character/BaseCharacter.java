@@ -4,27 +4,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.mini2Dx.core.engine.geom.CollisionPoint;
 import org.mini2Dx.core.graphics.Sprite;
 
 import com.allen.silo.ransack.character.attributes.Direction;
-import com.allen.silo.ransack.character.attributes.Location;
-import com.allen.silo.ransack.character.attributes.Script;
+import com.allen.silo.ransack.character.attributes.MapLocation;
 import com.allen.silo.ransack.maps.BasicMap;
 import com.allen.silo.ransack.utils.Constants;
-import com.allen.silo.ransack.utils.FileUtility;
-import com.allen.silo.ransack.utils.ImageUtility;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 
 public abstract class BaseCharacter {
 	public static Logger logger = Logger.getLogger(BaseCharacter.class.getName());
 		
-	protected Location loc;
+	protected MapLocation mapLocation;
 	protected Sprite sprite;
 	protected CollisionPoint point;
 	protected String name;
@@ -32,42 +27,32 @@ public abstract class BaseCharacter {
 	protected static Queue<String> mailbox;
 	
 	List<Texture> spriteImages;
-	
 	Texture currentSpriteImage;
 	
 	static{
 		mailbox = new LinkedList<String>();
 	}
 	
-	BaseCharacter(Location l, BasicMap m){
+	BaseCharacter(MapLocation l, BasicMap m){
 		
 	}
 	
-	BaseCharacter(Location l, String name, BasicMap m){
-		
-		Script script = FileUtility.loadCharacterScript(name+".xml");
-		this.name = script.getCharacterName();
-		
+	BaseCharacter(MapLocation l, String name, BasicMap m){
 		point = new CollisionPoint(l.getLocX()*Constants.BLOCKSIZE, l.getLocY()*Constants.BLOCKSIZE);
-		Pixmap spriteSheet = new Pixmap(FileUtility.getCharSheet(script.getFileName()));
-		spriteImages = ImageUtility.loadSpriteImages(spriteSheet);
-		currentSpriteImage = spriteImages.get(2);
-		
-		direction = Direction.SOUTH;
-		setSprite(new Sprite(currentSpriteImage));
 		setLocation(l);
 		m.setCellOccupied(l, name);
+		this.name = name;
 	}
 	
-	public Location getNewLocation(int key, Location oldL){
+	public MapLocation getNewLocation(int key, MapLocation oldL){
 		int newX = oldL.getLocX(), newY = oldL.getLocY();
 		switch(key){
 		case Input.Keys.LEFT:
-			this.direction = Direction.EAST;
+			this.direction = Direction.WEST;
 			newX = oldL.getLocX()-1;
 			break;
 		case Input.Keys.RIGHT:
-			this.direction = Direction.WEST;
+			this.direction = Direction.EAST;
 			newX = oldL.getLocX()+1;
 			break;
 		case Input.Keys.UP:
@@ -79,33 +64,33 @@ public abstract class BaseCharacter {
 			newY = oldL.getLocY()+1;
 			break;
 		}
-		return new Location(newX, newY);
+		return new MapLocation(newX, newY);
 	}
 	
 	public String getName(){
 		return this.name;
 	}
 	
-	public Location getLocation(){
-		return loc;
+	public MapLocation getLocation(){
+		return mapLocation;
 	}
 	
-	public void setLocation(Location loc){
-		this.loc = loc;
+	public void setLocation(MapLocation loc){
+		this.mapLocation = loc;
 	}
 	
 	/*
 	 * The X (horizontal) location of the character in terms of the map
 	 */
 	public int getX() {
-		return loc.getLocX();
+		return mapLocation.getLocX();
 	}
 
 	/*
 	 * The Y (vertical) location of the character in terms of the map
 	 */
 	public int getY() {
-		return loc.getLocY();
+		return mapLocation.getLocY();
 	}
 
 	public Sprite getSprite() {
@@ -124,12 +109,12 @@ public abstract class BaseCharacter {
 		this.point = point;
 	}
 	
-	public List<Location> getCardinals(){
-		List<Location> cardinals = new ArrayList<Location>();
-		cardinals.add(new Location(this.getX(), this.getY()-1));
-		cardinals.add(new Location(this.getX(), this.getY()+1));
-		cardinals.add(new Location(this.getX()-1, this.getY()));
-		cardinals.add(new Location(this.getX()+1, this.getY()));
+	public List<MapLocation> getCardinals(){
+		List<MapLocation> cardinals = new ArrayList<MapLocation>();
+		cardinals.add(new MapLocation(this.getX(), this.getY()-1));
+		cardinals.add(new MapLocation(this.getX(), this.getY()+1));
+		cardinals.add(new MapLocation(this.getX()-1, this.getY()));
+		cardinals.add(new MapLocation(this.getX()+1, this.getY()));
 		return cardinals;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.mini2Dx.desktop.DesktopMini2DxConfig;
 
 import com.allen.silo.ransack.editor.Editor;
-import com.allen.silo.ransack.main.Ransack;
 import com.badlogic.gdx.backends.lwjgl.DesktopMini2DxGame;
 
 public class RunEditor {

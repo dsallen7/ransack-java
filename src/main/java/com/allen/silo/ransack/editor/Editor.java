@@ -8,8 +8,8 @@ import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.tiled.exception.TiledException;
 
 import com.allen.silo.ransack.character.Cursor;
-import com.allen.silo.ransack.character.attributes.Location;
-import com.allen.silo.ransack.display.Display;
+import com.allen.silo.ransack.character.attributes.MapLocation;
+import com.allen.silo.ransack.display.BaseDisplay;
 import com.allen.silo.ransack.maps.EditorMap;
 import com.allen.silo.ransack.utils.Constants;
 import com.allen.silo.ransack.world.World;
@@ -22,7 +22,7 @@ public class Editor extends BasicGame {
 
 	private Cursor cursor;
 	//public static AppGameContainer appgc;
-	private static Display display;
+	private static BaseDisplay display;
 	
 	private Toolbar toolbar;
 	public EditorMap currentMap;
@@ -36,8 +36,8 @@ public class Editor extends BasicGame {
 		//provider.addListener(this);
 		try {
 			currentMap = new EditorMap("");
-			display = new Display();
-			cursor = new Cursor(new Location(0,0), currentMap);
+			//display = new Display();
+			cursor = new Cursor(new MapLocation(0,0), currentMap);
 			world = new World(currentMap);
 		} catch ( TiledException te){ 
 		}catch (IOException e) {
@@ -60,7 +60,7 @@ public class Editor extends BasicGame {
 
 	@Override
 	public void render(Graphics g){
-		display.drawImageMap(g);
+		//display.drawImageMap(g);
 	}
 	
 	@Override

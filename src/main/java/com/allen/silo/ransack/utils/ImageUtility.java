@@ -24,6 +24,12 @@ public class ImageUtility {
 			p.drawPixmap(spriteSheet, 0, 0, i, Constants.BLOCKSIZE, Constants.BLOCKSIZE, Constants.BLOCKSIZE);
 			lt.add(new Texture(p));
 		}
+		Pixmap p = new Pixmap(30, 30, spriteSheet.getFormat());
+		p.drawPixmap(spriteSheet, 0, 0, 240, 0, Constants.BLOCKSIZE, Constants.BLOCKSIZE);
+		lt.add(new Texture(p));
+		p = new Pixmap(30, 30, spriteSheet.getFormat());
+		p.drawPixmap(spriteSheet, 0, 0, 240, Constants.BLOCKSIZE, Constants.BLOCKSIZE, Constants.BLOCKSIZE);
+		lt.add(new Texture(p));
 		return lt;
 	}
 }
