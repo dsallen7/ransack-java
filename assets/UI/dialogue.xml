@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <data id="dialogueModal">
     <visibility>HIDDEN</visibility>
-	<horizontalLayout>xs-12c</horizontalLayout>
 	<flexDirection>COLUMN_REVERSE</flexDirection>
 	<children length="2">
 		<value class="org.mini2Dx.ui.element.Column" id="dialogueImageColumn">

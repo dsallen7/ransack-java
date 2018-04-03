@@ -13,7 +13,7 @@ public class EditorMap extends BasicMap {
 	public static Logger logger = Logger.getLogger(EditorMap.class.getName());
 	
 	public EditorMap(String fileName) throws IOException, TiledException{
-		super();
+		super(fileName);
 		this.grid = new Grid(10, 10);
 		for (int i = 0; i < 10; i++){
 			for (int j = 0; j < 10; j++){

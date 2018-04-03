@@ -1,6 +1,7 @@
 package com.allen.silo.ransack.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,7 +14,9 @@ import javax.xml.bind.Unmarshaller;
 import org.mini2Dx.ui.element.Image;
 
 import com.allen.silo.ransack.character.attributes.Script;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class FileUtility {
 	public static Logger logger = Logger.getLogger(FileUtility.class.getName());
@@ -71,7 +74,18 @@ public class FileUtility {
 	}
 	
 	public static FileHandle getAsset(String fileName){
-		return new FileHandle(Constants.ABSOLUTE_ASSETS_PATH+fileName);
+		FileHandle asset = null;
+		asset = Gdx.files.internal(fileName);
+		if(!asset.exists()){
+			asset = Gdx.files.external(fileName);
+			if(!asset.exists()){
+				asset = new FileHandle(Constants.ABSOLUTE_ASSETS_PATH+fileName);
+				if(!asset.exists()){
+					logger.log(Level.INFO, "NIGGER");
+				}
+			}
+		}
+		return asset;
 	}
 
 }

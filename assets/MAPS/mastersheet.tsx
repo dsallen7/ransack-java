@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="mastersheet" tilewidth="30" tileheight="30" tilecount="256" columns="16">
- <image source="../../../assets/IMG/mastersheet.bmp" trans="ff00ff" width="480" height="480"/>
+ <image source="mastersheet.bmp" trans="ff00ff" width="480" height="480"/>
  <tile id="0">
   <properties>
    <property name="isFloor" type="bool" value="true"/>
@@ -447,14 +447,14 @@
  </tile>
  <tile id="68">
   <properties>
-   <property name="isCeiling" type="bool" value="true"/>
+   <property name="isBlocker" type="bool" value="true"/>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
   </properties>
  </tile>
  <tile id="69">
   <properties>
-   <property name="isCeiling" type="bool" value="true"/>
+   <property name="isBlocker" type="bool" value="true"/>
    <property name="isFloor" type="bool" value="false"/>
    <property name="isOccupied" value=""/>
   </properties>

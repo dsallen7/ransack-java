@@ -65,9 +65,6 @@ public class PlayableDisplay extends BaseDisplay {
 		super(uiContainer);
 		assetManager = Mdx.di.getBean(RansackAssetManager.class);
 		mapShiftQueue = new LinkedList<MapShift>();
-		ewMapShift = new RansackTexture((Constants.WINDOWSIZE+1)*Constants.BLOCKSIZE, Constants.WINDOWSIZE*Constants.BLOCKSIZE, Pixmap.Format.RGBA8888);
-		nsMapShift = new RansackTexture(Constants.WINDOWSIZE*Constants.BLOCKSIZE, (Constants.WINDOWSIZE+1)*Constants.BLOCKSIZE, Pixmap.Format.RGBA8888);
-		mapWindow = new RansackTexture(Constants.WINDOWSIZE*Constants.BLOCKSIZE, Constants.WINDOWSIZE*Constants.BLOCKSIZE, Pixmap.Format.RGBA8888);
 	}
 	
 	public void update(float delta){
@@ -109,7 +106,6 @@ public class PlayableDisplay extends BaseDisplay {
 		showPlayerLocation(g, (Player) playables.get("player"));
 		//showPlayerStats(g, (Player) playables.get("player"));
 		//showWindowOffsets(g, currentMap);
-		g.drawTexture(mapWindow, 0, 0);
 
         uiContainer.render(g);
     	uiContainer.printLog(g, logHistory);

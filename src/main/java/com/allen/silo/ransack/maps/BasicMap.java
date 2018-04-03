@@ -13,6 +13,7 @@ import org.mini2Dx.tiled.exception.TiledException;
 
 import com.allen.silo.ransack.character.attributes.MapLocation;
 import com.allen.silo.ransack.utils.FileUtility;
+import com.badlogic.gdx.Gdx;
 
 public class BasicMap extends TiledMap implements Serializable {
 	
@@ -25,10 +26,6 @@ public class BasicMap extends TiledMap implements Serializable {
 	protected int offsetY;
 	private String name;
 	
-	public BasicMap(){
-		super(FileUtility.loadMap("prototype"));
-	}
-
 	public BasicMap(String fileName) throws IOException, TiledException{
 		super(FileUtility.loadMap(fileName));
 		grid = new Grid(getWidth(), getHeight());

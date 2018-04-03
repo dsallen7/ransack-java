@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <data id="HUD">
     <visibility>VISIBLE</visibility>
-    <!--<verticalAlignment>TOP</verticalAlignment>
-    <horizontalAlignment>CENTER</horizontalAlignment>-->
-	<horizontalLayout>1c</horizontalLayout>
 	<styleId>no-background-no-padding</styleId> 
 	<children length="2">
 		<value class="org.mini2Dx.ui.element.Image" id="HUDImage">
